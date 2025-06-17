@@ -2,13 +2,14 @@ require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
 const indexRoute = require('./routes/indexRoute')
+const verifyToken = require('./middlewares/authMiddleware')
 
 const app = express()
 
 app.use(cors())
 app.use(express.json())
 
-app.get('/', (req, res) => res.json({ msg: 'hello world!' }))
+app.get('/protected', verifyToken, (req, res) => res.json({ msg: 'hello world!' }))
 app.use('/api', indexRoute)
 
 

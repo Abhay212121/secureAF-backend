@@ -1,6 +1,8 @@
 const bcrypt = require('bcrypt')
 const db = require('../db/queries')
 const { validationResult } = require('express-validator');
+const jwt = require('jsonwebtoken')
+require('dotenv').config()
 
 const feedUsersToDb = async (req, res) => {
     const errors = validationResult(req);
@@ -25,7 +27,7 @@ const feedUsersToDb = async (req, res) => {
 }
 
 const authenticateUser = async (req, res) => {
-    let { userName, userPassword } = req.body;
+    let { userName, userPassword, rememberMe } = req.body;
     try {
         const user = await db.getUserByUserName(userName)
 
@@ -36,15 +38,21 @@ const authenticateUser = async (req, res) => {
         const hashedPassword = user[0].password;
         const isMatch = await bcrypt.compare(userPassword, hashedPassword)
 
-        if (isMatch) {
-            res.json({ msg: 'user found', status: 200 })
-        }
-        else {
+        if (!isMatch) {
             res.json({ msg: 'Password Incorrect', path: 'userPassword', status: 400 })
         }
-    } catch (error) {
+
+        const payload = {
+            id: user[0].id,
+            userName: user[0].username
+
+        }
+        const token = jwt.sign(payload, process.env.JWT_SECRET, rememberMe ? { expiresIn: '7d' } : { expiresIn: '1h' })
+        res.json({ msg: 'user found', status: 200, token: token })
+
+    }
+    catch (error) {
         res.json({ msg: "Internal Server Error", status: 500 });
     }
 }
-
 module.exports = { feedUsersToDb, authenticateUser }

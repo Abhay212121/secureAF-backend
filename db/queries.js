@@ -14,8 +14,13 @@ const getUserByUserName = async (username) => {
     return rows;
 }
 
-const addPostsToDBQuery = async (username, postMessage, postTitle) => {
-    await pool.query('INSERT INTO posts(username,post_title,post_message) VALUES($1,$2,$3)', [username, postTitle, postMessage])
+const addPostsToDBQuery = async (username, postTitle, postMessage, date) => {
+    await pool.query('INSERT INTO posts(username,post_title,post_message,post_time) VALUES($1,$2,$3,$4)', [username, postTitle, postMessage, date])
 }
 
-module.exports = { addUserToDb, CheckUserInDb, getUserByUserName, addPostsToDBQuery }
+const getPostsFromDb = async () => {
+    const { rows } = await pool.query('SELECT * FROM posts')
+    return rows;
+}
+
+module.exports = { addUserToDb, CheckUserInDb, getUserByUserName, addPostsToDBQuery, getPostsFromDb }

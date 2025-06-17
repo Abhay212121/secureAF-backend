@@ -14,11 +14,14 @@ CREATE TABLE IF NOT EXISTS users(
 );`
 
 const createPostsSQL =
-    `CREATE TABLE IF NOT EXISTS posts(
+    `
+    DROP TABLE posts;
+    CREATE TABLE IF NOT EXISTS posts(
     postId INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     username VARCHAR (255),
     post_title VARCHAR (255),
-    post_message TEXT
+    post_message TEXT,
+    post_time VARCHAR (255)
 )
 
 `

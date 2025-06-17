@@ -22,9 +22,9 @@ const addPostsToTheDb = async (req, res) => {
     }
 }
 
-const getUsersFromDb = async (req, res) => {
+const getPosts = async (req, res) => {
     const data = await db.getPostsFromDb();
     res.json({ data: data, status: 200 })
 }
 
-module.exports = { addPostsToTheDb, getUsersFromDb }
+module.exports = { addPostsToTheDb, getPosts }

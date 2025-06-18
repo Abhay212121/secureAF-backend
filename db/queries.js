@@ -1,7 +1,7 @@
 const pool = require('./pool')
 
-const addUserToDb = async (username, email, password) => {
-    await pool.query('INSERT INTO users(username,email,password) VALUES($1,$2,$3)', [username, email, password])
+const addUserToDb = async (username, email, password, role) => {
+    await pool.query('INSERT INTO users(username,email,password,role) VALUES($1,$2,$3,$4)', [username, email, password, role])
 }
 
 const CheckUserInDb = async (username) => {
@@ -23,4 +23,13 @@ const getPostsFromDb = async () => {
     return rows;
 }
 
-module.exports = { addUserToDb, CheckUserInDb, getUserByUserName, addPostsToDBQuery, getPostsFromDb }
+const putMemberRole = async (username) => {
+    await pool.query(`UPDATE users SET role = 'is a member' WHERE username = ($1)`, [username])
+}
+
+const getUserRoleFromDb = async (username) => {
+    const { rows } = await pool.query('SELECT role FROM users WHERE username = $1', [username])
+    return rows;
+}
+
+module.exports = { addUserToDb, CheckUserInDb, getUserByUserName, addPostsToDBQuery, getPostsFromDb, putMemberRole, getUserRoleFromDb }

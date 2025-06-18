@@ -16,7 +16,7 @@ const feedUsersToDb = async (req, res) => {
         const user = await db.CheckUserInDb(userName)
         if (user.length == 0) {
             const hashedPassword = await bcrypt.hash(userPassword, 8)
-            await db.addUserToDb(userName, userMail, hashedPassword)
+            await db.addUserToDb(userName, userMail, hashedPassword, 'not a member')
             return res.status(201).json({ msg: 'User registered successfully!' })
         } else {
             return res.status(409).json([{ msg: 'Username already exists!', path: 'userName' }])
@@ -39,15 +39,15 @@ const authenticateUser = async (req, res) => {
         const isMatch = await bcrypt.compare(userPassword, hashedPassword)
 
         if (!isMatch) {
-            res.json({ msg: 'Password Incorrect', path: 'userPassword', status: 400 })
+            return res.json({ msg: 'Password Incorrect', path: 'userPassword', status: 400 })
         }
 
         const payload = {
             id: user[0].id,
-            userName: user[0].username
-
+            userName: user[0].username,
+            role: user[0].role
         }
-        const token = jwt.sign(payload, process.env.JWT_SECRET, rememberMe ? { expiresIn: '7d' } : { expiresIn: '1h' })
+        const token = jwt.sign(payload, process.env.JWT_SECRET, rememberMe ? { expiresIn: '7d' } : { expiresIn: '3h' })
         res.json({ msg: 'user found', status: 200, token: token, rememberMe: rememberMe })
 
     }

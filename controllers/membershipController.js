@@ -1,16 +1,20 @@
-// require('dotenv').config()
+require('dotenv').config()
+const db = require('../db/queries')
 
-// const checkMember = (req, res) => {
-//     const userEnteredKey = req.body.key
-//     console.log('hii')
-//     if (userEnteredKey === process.env.MEMBERSHIP_KEY) {
-//         req.member = true;
-//         return res.json({ status: 200, msg: 'Correct key entered!' })
-//     }
-//     else {
-//         req.member = false;
-//         return res.json({ status: 406, msg: 'Wrong key Entered!' })
-//     }
-// }
+const handleMembershipPost = async (req, res) => {
+    const key = req.body.key;
+    try {
+        //correct key is entered.
+        if (key === process.env.MEMBERSHIP_KEY) {
+            const username = req.user.userName;
+            //update the db
+            await db.putMemberRole(username)
+            return res.json({ status: 200, msg: 'Membership added!' })
+        }
+        return res.json({ status: 403, msg: 'Wrong key!' })
+    } catch (error) {
+        return res.json({ status: 500, msg: 'Internal server error!' })
+    }
+}
 
-// module.exports = checkMember
+module.exports = handleMembershipPost

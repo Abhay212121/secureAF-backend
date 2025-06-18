@@ -23,8 +23,11 @@ const addPostsToTheDb = async (req, res) => {
 }
 
 const getPosts = async (req, res) => {
+    const username = req.user.userName;
     const data = await db.getPostsFromDb();
-    res.json({ data: data, status: 200 })
+    const member = await db.getUserRoleFromDb(username)
+    const role = member[0].role;
+    res.json({ data: data, status: 200, role: role })
 }
 
 module.exports = { addPostsToTheDb, getPosts }

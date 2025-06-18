@@ -6,11 +6,13 @@ require('dotenv').config()
 
 
 const createUsersSQL = `
+    DROP TABLE users;
 CREATE TABLE IF NOT EXISTS users(
     userId INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     username VARCHAR (255),
     email VARCHAR (255),
-    password VARCHAR (255)
+    password VARCHAR (255),
+    role VARCHAR(100) DEFAULT 'not a member'
 );`
 
 const createPostsSQL =

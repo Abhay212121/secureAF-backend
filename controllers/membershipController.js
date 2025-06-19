@@ -17,4 +17,15 @@ const handleMembershipPost = async (req, res) => {
     }
 }
 
-module.exports = handleMembershipPost
+const revokeMembershipController = async (req, res) => {
+    const userName = req.body.username
+    try {
+        await db.revokeMembershipInDb(userName)
+        res.json({ status: 200, msg: 'Membership Revoked!' })
+
+    } catch (error) {
+        return res.json({ status: 500, msg: 'Internal Server Error!' })
+    }
+}
+
+module.exports = { handleMembershipPost, revokeMembershipController }

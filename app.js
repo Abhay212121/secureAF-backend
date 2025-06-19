@@ -3,8 +3,7 @@ const express = require('express')
 const cors = require('cors')
 const indexRoute = require('./routes/indexRoute')
 const postsRoute = require('./routes/postsRoute')
-const membershipRoute = require('./routes/membershipRoute')
-
+const { membershipRoute, revokeMembership } = require('./routes/membershipRoute')
 const app = express()
 
 app.use(cors())
@@ -13,6 +12,7 @@ app.use(express.json())
 app.use('/api', indexRoute)
 app.use('/posts', postsRoute)
 app.use('/membership', membershipRoute)
+app.use('/revokeMembership', revokeMembership)
 
 
 const PORT = process.env.PORT || 3000;

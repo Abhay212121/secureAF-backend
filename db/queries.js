@@ -32,4 +32,8 @@ const getUserRoleFromDb = async (username) => {
     return rows;
 }
 
-module.exports = { addUserToDb, CheckUserInDb, getUserByUserName, addPostsToDBQuery, getPostsFromDb, putMemberRole, getUserRoleFromDb }
+const revokeMembershipInDb = async (username) => {
+    await pool.query(`UPDATE users SET role = 'not a member' WHERE username = ($1)`, [username])
+}
+
+module.exports = { addUserToDb, CheckUserInDb, getUserByUserName, addPostsToDBQuery, getPostsFromDb, putMemberRole, getUserRoleFromDb, revokeMembershipInDb }

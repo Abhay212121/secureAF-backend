@@ -23,7 +23,7 @@ const addPostsToTheDb = async (req, res) => {
 }
 
 const getPosts = async (req, res) => {
-    const username = req.user.userName;
+    const username = req.headers['usernameheader'];
     const data = await db.getPostsFromDb();
     const member = await db.getUserRoleFromDb(username)
     const role = member[0].role;

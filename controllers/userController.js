@@ -52,11 +52,11 @@ const authenticateUser = async (req, res) => {
         const payload = {
             userName: user[0].username,
         }
-
+        const role = user[0].role;
         //creating the token and sending it to the client so the client can store it somewhere.
         const token = jwt.sign(payload, process.env.JWT_SECRET, rememberMe ? { expiresIn: '7d' } : { expiresIn: '3h' })
 
-        res.json({ msg: 'user found', status: 200, token: token, rememberMe: rememberMe, userName: userName })
+        res.json({ msg: 'user found', status: 200, token: token, rememberMe: rememberMe, userName: userName, role: role })
 
     }
     catch (error) {
